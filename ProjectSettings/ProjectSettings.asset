@@ -135,10 +135,7 @@ PlayerSettings:
     16:9: 1
     Others: 1
   bundleVersion: 0.1
-  preloadedAssets:
-  - {fileID: -3780140007484203195, guid: 4f8dbccf3eb3c2344bcfcf510e809a85, type: 2}
-  - {fileID: -8701041053949311823, guid: 7d9b7a970d6651940b48910423d7c1ed, type: 2}
-  - {fileID: 11400000, guid: 3af3ccec34530654ca223a47da46d29b, type: 2}
+  preloadedAssets: []
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -735,11 +732,11 @@ PlayerSettings:
   m_MobileRenderingPath: 1
   metroPackageName: TargetsApp
   metroPackageVersion: 1.0.0.0
-  metroCertificatePath: 
+  metroCertificatePath: Assets\WSATestCertificate.pfx
   metroCertificatePassword: 
-  metroCertificateSubject: 
-  metroCertificateIssuer: 
-  metroCertificateNotAfter: 0000000000000000
+  metroCertificateSubject: DefaultCompany
+  metroCertificateIssuer: DefaultCompany
+  metroCertificateNotAfter: 00962b8c224fda01
   metroApplicationDescription: Template_3D
   wsaImages: {}
   metroTileShortName: Targets_V1

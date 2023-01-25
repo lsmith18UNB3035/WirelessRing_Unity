@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class deployTargets : MonoBehaviour
@@ -16,21 +17,25 @@ public class deployTargets : MonoBehaviour
     private float timerTime;
     private float startTime;
     private GameObject curTarget;
+    public TMP_Text scoreText;
 
 
     // Start is called before the first frame update
     void Start()
     {
+        Transform mainCamTrans = Camera.main.GetComponent<Transform>();
+        mainCamTrans.position = new Vector3(mainCamTrans.position.x, mainCamTrans.position.y, -12.0f);
         screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 3.0f));
         misses = 0;
         tally = 0;
         deltaX = 0.00f;
         deltaY = 0.00f;
         curTarget = GameObject.FindWithTag("Target");
+        scoreText.text = "";
+
         startTimer();
         //StartCoroutine(setUpSpawn());
     }
-
     private void spawnTarget()
     {
         GameObject init = Instantiate(targetPrefab) as GameObject;
@@ -40,7 +45,6 @@ public class deployTargets : MonoBehaviour
         curTarget = init;
         startTimer();
     }
-
     private void startTimer()
     {
         if (!(timerOn))
@@ -70,6 +74,18 @@ public class deployTargets : MonoBehaviour
         Destroy(curTarget);
         spawnTarget();
     }
+    private void updateDisplay(string toDisplay, bool gameOver)
+    {
+        if (gameOver)
+        {
+            scoreText.fontSize = 0.5f;
+            scoreText.text = ("Game Over.\nTotal Misses: " + misses + "\nAverage Miss Distance: (" + deltaX/10.0f + ", " + deltaY/10.0f + ")\nAverage Time to click: " + timeElapsed / 10.0f);
+        }
+        else
+        {
+            scoreText.text = toDisplay;
+        }
+    }
     /**
     IEnumerator setUpSpawn()
     {
@@ -91,6 +107,7 @@ public class deployTargets : MonoBehaviour
             Debug.Log("MISS");
             misses += 1;
             resetTarget(false);
+            updateDisplay("MISS!", false);
         }
         else
         {
@@ -113,18 +130,22 @@ public class deployTargets : MonoBehaviour
                         deltaY += Mathf.Abs(Input.mousePosition.y - objInPix.y);
                         TargetControl objectScript = rhInfo.collider.GetComponent<TargetControl>();
                         resetTarget(true);
+                        updateDisplay("HIT!", false);
                     }
                     else
                     {
                         Debug.Log("Game Over. Total Misses: " + misses + ", Average miss x: " + deltaX/10 + ", average miss y: " + deltaY/10 + ", average time to click: " + timeElapsed/10.0f);
+                        timerOn = false;
+                        Destroy(curTarget);
+                        updateDisplay("Gameover", true);
                     }
-                
                 }
                 else
                 {
                     Debug.Log("MISS");
                     misses += 1;
                     resetTarget(false);
+                    updateDisplay("MISS", false);
                 }
             } 
         }
