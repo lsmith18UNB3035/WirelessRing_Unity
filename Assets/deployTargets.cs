@@ -18,6 +18,7 @@ public class deployTargets : MonoBehaviour
     private float startTime;
     private GameObject curTarget;
     public TMP_Text scoreText;
+    private Canvas gameBounds;
 
 
     // Start is called before the first frame update

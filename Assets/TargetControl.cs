@@ -1,16 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TargetControl : MonoBehaviour
 {
     public Vector3 newPos;
-    private Vector2 screenSize;
+    private Vector3 screenSize;
+    private Canvas bounds;
     // Start is called before the first frame update
     void Start()
     {
-        screenSize = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 3.0f));
-        newPos = new Vector3(Random.Range(-screenSize.x, screenSize.x), Random.Range(-screenSize.y, screenSize.y), 1.5f);
+
+        bounds = GameObject.FindGameObjectWithTag("Bounds").GetComponent<Canvas>();
+        RectTransform rectTransform = bounds.GetComponent<RectTransform>();
+        screenSize = Camera.main.ScreenToWorldPoint(new Vector3(rectTransform.position.x, rectTransform.position.y, rectTransform.position.z));
+        newPos = new Vector3(Random.Range(-screenSize.x, screenSize.x), Random.Range(-screenSize.y, screenSize.y), screenSize.z);
         transform.position = newPos;
     }
 
