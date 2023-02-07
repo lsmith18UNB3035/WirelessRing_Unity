@@ -37,6 +37,8 @@ public class deployTargets : MonoBehaviour
         startTimer();
         //StartCoroutine(setUpSpawn());
     }
+
+
     private void spawnTarget()
     {
         GameObject init = Instantiate(targetPrefab) as GameObject;
@@ -151,4 +153,5 @@ public class deployTargets : MonoBehaviour
             } 
         }
     }
+        
 }
