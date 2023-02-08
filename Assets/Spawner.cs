@@ -16,13 +16,20 @@ public class Spawner : MonoBehaviour
     private bool timerOn;
     private float timerTime;
     private float startTime;
+    private Vector3 startPos;
+    private Vector3 destPos;
+    private Vector3 idealTravel;
+    private LineRenderer pathDraw;
 
 
     // Start is called before the first frame update
     void Start()
     {
+        GameObject tmpPathDraw = GameObject.FindWithTag("PathDrawer");
+        pathDraw = tmpPathDraw.GetComponent<LineRenderer>();
+        Debug.Log(pathDraw);
         Transform mainCamTrans = Camera.main.GetComponent<Transform>();
-        mainCamTrans.position = new Vector3(mainCamTrans.position.x, mainCamTrans.position.y, -12.0f);
+        //mainCamTrans.position = new Vector3(mainCamTrans.position.x, mainCamTrans.position.y, -12.0f);
         SpawnCircleFormation();
         MeshRenderer sphereRenderer;
         for (int i = 0; i < 16; i++)
@@ -89,6 +96,16 @@ public class Spawner : MonoBehaviour
                             sphereRenderer.material.SetColor("_Color", Color.red);
                             sphereRenderer = gameObjects[curHit].GetComponent<MeshRenderer>();
                             sphereRenderer.material.SetColor("_Color", Color.blue);
+                            Debug.Log("Before camera: " + Input.mousePosition);
+                            startPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
+                            Debug.Log("Before change: " + startPos);
+                            startPos = new Vector3(startPos.x, startPos.y, 10.0f);
+                            Debug.Log("AfterChange: " + startPos);
+                            Transform nextTarget = gameObjects[curHit + 8].GetComponent<Transform>();
+                            Debug.Log(nextTarget.position);
+                            destPos = new Vector3(nextTarget.position.x, nextTarget.position.y, 10.0f);
+                            pathDraw.SetPosition(1, startPos);
+                            pathDraw.SetPosition(0, destPos);
                             curHit = curHit + 8;
                             add = false;
 
@@ -99,6 +116,16 @@ public class Spawner : MonoBehaviour
                             sphereRenderer.material.SetColor("_Color", Color.red);
                             sphereRenderer = gameObjects[curHit].GetComponent<MeshRenderer>();
                             sphereRenderer.material.SetColor("_Color", Color.blue);
+                            Debug.Log("Before camera: " + Input.mousePosition);
+                            startPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
+                            Debug.Log("Before Change: " + startPos);
+                            startPos = new Vector3(startPos.x, startPos.y, 10.0f);
+                            Debug.Log("After Change: " + startPos);
+                            Transform nextTarget = gameObjects[curHit - 7].GetComponent<Transform>();
+                            Debug.Log(nextTarget.position);
+                            destPos = new Vector3(nextTarget.position.x, nextTarget.position.y, 10.0f);
+                            pathDraw.SetPosition(1, startPos);
+                            pathDraw.SetPosition(0, destPos);
                             curHit = curHit - 7;
                             add = true;
                         }
@@ -130,10 +157,8 @@ public class Spawner : MonoBehaviour
         gameObjects = new GameObject[16];
         for (int i = 0; i < 16; i++)
         {
-            Vector2 spawnPosition;
+            Vector3 spawnPosition = new Vector3(((radius * Mathf.Cos(angle * Mathf.Deg2Rad)) + centerPosition.x), ((radius * Mathf.Sin(angle * Mathf.Deg2Rad)) + centerPosition.y), 10.0f);
 
-            spawnPosition.x = (radius * Mathf.Cos(angle * Mathf.Deg2Rad)) + centerPosition.x;
-            spawnPosition.y = (radius * Mathf.Sin(angle * Mathf.Deg2Rad)) + centerPosition.y;
 
             GameObject init = Instantiate(targetPrefab, spawnPosition, Quaternion.identity);
             init.tag = "clone" + i;

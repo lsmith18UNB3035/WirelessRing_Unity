@@ -16,7 +16,7 @@ public class TargetControl : MonoBehaviour
         bounds = GameObject.FindGameObjectWithTag("Bounds").GetComponent<Canvas>();
         RectTransform rectTransform = bounds.GetComponent<RectTransform>();
         screenSize = Camera.main.ScreenToWorldPoint(new Vector3(rectTransform.position.x, rectTransform.position.y, rectTransform.position.z));
-        newPos = new Vector3(Random.Range(-screenSize.x, screenSize.x), Random.Range(-screenSize.y, screenSize.y), screenSize.z);
+        newPos = new Vector3(Random.Range(-screenSize.x, screenSize.x), Random.Range(-screenSize.y, screenSize.y), 10.0f);
         transform.position = newPos;
     }
 
