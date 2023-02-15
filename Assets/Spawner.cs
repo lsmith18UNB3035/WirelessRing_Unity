@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class Spawner : MonoBehaviour
@@ -20,6 +21,9 @@ public class Spawner : MonoBehaviour
     private Vector3 destPos;
     private Vector3 idealTravel;
     private LineRenderer pathDraw;
+    private float deltaX;
+    private float deltaY;
+    public TMP_Text scoreText;
 
 
     // Start is called before the first frame update
@@ -40,6 +44,22 @@ public class Spawner : MonoBehaviour
         sphereRenderer = gameObjects[0].GetComponent<MeshRenderer>();
         sphereRenderer.material.SetColor("_Color", Color.red);
         startTimer();
+        deltaX = 0.00f;
+        deltaY = 0.00f;
+        scoreText.text = "";
+    }
+
+    private void updateDisplay(string toDisplay, bool gameOver)
+    {
+        if (gameOver)
+        {
+            scoreText.fontSize = 0.5f;
+            scoreText.text = ("Game Over.\nAverage Miss Distance: (" + deltaX / 16.0f + ", " + deltaY / 16.0f + ")\nTotal Misses: " + missedHits);
+        }
+        else
+        {
+            scoreText.text = toDisplay;
+        }
     }
 
 
@@ -51,7 +71,7 @@ public class Spawner : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
 
-            Ray ray = GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
+            Ray ray = GetComponent<Camera>().ScreenPointToRay(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
             RaycastHit hit;
 
             if (Physics.Raycast(ray, out hit))
@@ -62,8 +82,14 @@ public class Spawner : MonoBehaviour
                 if (hit.collider.tag == curTag || hit.collider.tag == "Target")
                 {
                     hitOnTarget++; //correct target hit
-                    if(curHit == 15)
+                    Transform clickedPos = hit.collider.GetComponent<Transform>();
+                    Vector3 objInPix = Camera.main.WorldToScreenPoint(clickedPos.position);
+                    Debug.Log("Hit Data: Mouse Clicked at: (" + Input.mousePosition.x + "," + Input.mousePosition.y + "), and Object Centered At: (" + objInPix.x + "," + objInPix.y + ")");
+                    deltaX += Mathf.Abs(Input.mousePosition.x - objInPix.x);
+                    deltaY += Mathf.Abs(Input.mousePosition.y - objInPix.y);
+                    if (curHit == 15)
                     {
+                        updateDisplay("Gameover", true);
                         timeElapsed = getTimeElapsed();
                         Debug.Log("Movement time: " + timeElapsed);
 
@@ -90,22 +116,20 @@ public class Spawner : MonoBehaviour
                     }
                     else
                     {
+                        updateDisplay("HIT!", false);
                         if (add)
                         {
                             MeshRenderer sphereRenderer = gameObjects[curHit + 8].GetComponent<MeshRenderer>();
                             sphereRenderer.material.SetColor("_Color", Color.red);
                             sphereRenderer = gameObjects[curHit].GetComponent<MeshRenderer>();
                             sphereRenderer.material.SetColor("_Color", Color.blue);
-                            Debug.Log("Before camera: " + Input.mousePosition);
                             startPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
-                            Debug.Log("Before change: " + startPos);
                             startPos = new Vector3(startPos.x, startPos.y, 10.0f);
-                            Debug.Log("AfterChange: " + startPos);
                             Transform nextTarget = gameObjects[curHit + 8].GetComponent<Transform>();
-                            Debug.Log(nextTarget.position);
                             destPos = new Vector3(nextTarget.position.x, nextTarget.position.y, 10.0f);
                             pathDraw.SetPosition(1, startPos);
                             pathDraw.SetPosition(0, destPos);
+                            Debug.Log(pathDraw.bounds);
                             curHit = curHit + 8;
                             add = false;
 
@@ -116,13 +140,9 @@ public class Spawner : MonoBehaviour
                             sphereRenderer.material.SetColor("_Color", Color.red);
                             sphereRenderer = gameObjects[curHit].GetComponent<MeshRenderer>();
                             sphereRenderer.material.SetColor("_Color", Color.blue);
-                            Debug.Log("Before camera: " + Input.mousePosition);
                             startPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
-                            Debug.Log("Before Change: " + startPos);
                             startPos = new Vector3(startPos.x, startPos.y, 10.0f);
-                            Debug.Log("After Change: " + startPos);
                             Transform nextTarget = gameObjects[curHit - 7].GetComponent<Transform>();
-                            Debug.Log(nextTarget.position);
                             destPos = new Vector3(nextTarget.position.x, nextTarget.position.y, 10.0f);
                             pathDraw.SetPosition(1, startPos);
                             pathDraw.SetPosition(0, destPos);
@@ -142,6 +162,7 @@ public class Spawner : MonoBehaviour
             else
             {
                 missedHits++; //no target hit
+                updateDisplay("MISS!", false);
             }
         }
     }
