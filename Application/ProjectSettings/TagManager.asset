@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - Target
+  - Bounds
+  - clone0
+  - clone1
+  - clone2
+  - clone3
+  - clone4
+  - clone5
+  - clone6
+  - clone7
+  - clone8
+  - clone9
+  - clone10
+  - clone11
+  - clone12
+  - clone13
+  - clone14
+  - clone15
+  - PathDrawer
+  - cursor
+  - clicker
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - Spatial Awareness
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
